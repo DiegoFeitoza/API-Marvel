@@ -1,54 +1,40 @@
-const path = require('path');
+const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-    mode: 'development',
-    entry: {
-        functions: ['./src/scss/app.scss'],
-        glide: './src/js/app.js',
-    },
+    entry: './src/app.js',
     output: {
-        path: path.resolve(__dirname, 'assets'),
-        filename: 'dist/js/[name].js',
+        path: __dirname + '/dist',
+        filename: './app.js'
     },
+    devServer:{
+        port: 8080,
+        contentBase: './dist',
+    },
+    resolve: {
+        extensions: ['','.js','.jsx'],
+        alias:{
+            modules: __dirname + '/node_modules'
+        }
+    },
+    plugins:[
+        new ExtractTextPlugin('app.css')
+    ],
     module: {
-        rules: [
-            /**
-             * Running Babel on JS files.
-             */
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        plugins: ['lodash'],
-                        presets: ['@wordpress/default']
-                    }
-                }
-            },
-            {
-                test: /\.scss$/,
-                use: [
-                    {
-                        loader: 'file-loader',
-                        options: {
-                            name: 'dist/css/[name].css',
-                        }
-                    },
-                    {
-                        loader: 'extract-loader'
-                    },
-                    {
-                        loader: 'css-loader?-url'
-                    },
-                    {
-                        loader: 'postcss-loader'
-                    },
-                    {
-                        loader: 'sass-loader'
-                    }
-                ]
+        loaders:[{
+            test: /.js[x]?$/,
+            loader: 'babel-loader',
+            exclude: /node_modules/,
+            query: {
+                presets: ['es2015', 'react'],
+                plugins: ['transform-object-rest-spread']
             }
-        ]
-    },
-};
+        },{
+            test: /\.scss$/,
+            loader: ExtractTextPlugin.extract('style-loader', 'css-loader','sass-loader')
+        },{
+            test: /\.woff|.woff2|.ttf|.eot|.svg*.*$/,
+            loader: 'file'
+        }]
+    }
+}
