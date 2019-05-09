@@ -1,41 +1,89 @@
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './src/app.js',
-  output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'dist')
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(scss)$/,
-        use: [
-          {
-            // Adds CSS to the DOM by injecting a `<style>` tag
-            loader: 'style-loader'
-          },
-          {
-            // Interprets `@import` and `url()` like `import/require()` and will resolve them
-            loader: 'css-loader'
-          },
-          {
-            // Loader for webpack to process CSS with PostCSS
-            loader: 'postcss-loader',
-            options: {
-              plugins: function () {
-                return [
-                  require('autoprefixer')
-                ];
-              }
+    mode: 'development',
+
+    entry: {
+        bundle: path.resolve(__dirname, 'src','app.js'),
+        functions: path.resolve(__dirname, 'src','functions.js'),
+    },
+
+    output: {
+        filename: '[name].js',
+        path: path.resolve(__dirname, 'dist'),
+        publicPath: '/',
+    },
+
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+            },
+            {
+                test: /\.ico$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                    outputPath: '../dist/assets/icons',
+                    publicPath: 'icons',
+                },
+            },
+            {
+                test: /\.(png|jpg|jpeg|svg|gif)$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                    outputPath: '../dist/assets/images',
+                    publicPath: 'images',
+                },
+            },
+            {
+                test: /\.(woff|woff2|ttf|eot)$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                    outputPath: '../dist/assets/fonts',
+                    publicPath: 'fonts',
+                },
+            },
+            {
+                test: /\.(css|sass|scss)$/,
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                    },
+                    'css-loader',
+                    'sass-loader',
+                ],
+            },
+        ],
+    },
+
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: "../dist/assets/css/styles.css",
+        }),
+    ],
+
+    devServer: {
+        contentBase: path.resolve(__dirname, 'dist'),
+        port: 3002,
+        proxy: {
+            '/**': {
+                target: '/index.html',
+                bypass(req){
+                    if(req.headers.accept.indexOf('html') !== -1){
+                        return '/index.html';
+                    }
+
+                    return '';
+                }
             }
-          },
-          {
-            // Loads a SASS/SCSS file and compiles it to CSS
-            loader: 'sass-loader'
-          }
-        ]
-      }
-    ]
-  }
+        },        
+    },
+
+    devtool: 'none',
 };
