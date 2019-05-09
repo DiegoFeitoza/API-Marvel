@@ -1,40 +1,41 @@
-const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const path = require('path');
 
 module.exports = {
-    entry: './src/app.js',
-    output: {
-        path: __dirname + '/dist',
-        filename: './app.js'
-    },
-    devServer:{
-        port: 8080,
-        contentBase: './dist',
-    },
-    resolve: {
-        extensions: ['','.js','.jsx'],
-        alias:{
-            modules: __dirname + '/node_modules'
-        }
-    },
-    plugins:[
-        new ExtractTextPlugin('app.css')
-    ],
-    module: {
-        loaders:[{
-            test: /.js[x]?$/,
-            loader: 'babel-loader',
-            exclude: /node_modules/,
-            query: {
-                presets: ['es2015', 'react'],
-                plugins: ['transform-object-rest-spread']
+  entry: './src/app.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(scss)$/,
+        use: [
+          {
+            // Adds CSS to the DOM by injecting a `<style>` tag
+            loader: 'style-loader'
+          },
+          {
+            // Interprets `@import` and `url()` like `import/require()` and will resolve them
+            loader: 'css-loader'
+          },
+          {
+            // Loader for webpack to process CSS with PostCSS
+            loader: 'postcss-loader',
+            options: {
+              plugins: function () {
+                return [
+                  require('autoprefixer')
+                ];
+              }
             }
-        },{
-            test: /\.scss$/,
-            loader: ExtractTextPlugin.extract('style-loader', 'css-loader','sass-loader')
-        },{
-            test: /\.woff|.woff2|.ttf|.eot|.svg*.*$/,
-            loader: 'file'
-        }]
-    }
-}
+          },
+          {
+            // Loads a SASS/SCSS file and compiles it to CSS
+            loader: 'sass-loader'
+          }
+        ]
+      }
+    ]
+  }
+};
