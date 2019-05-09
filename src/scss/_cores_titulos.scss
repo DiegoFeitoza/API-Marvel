@@ -1,0 +1,20 @@
+h1,h2,h3,h4,h5,h6{
+    &.vermelho{
+        color: $vermelho
+    }
+    &.verde{
+        color: $verde
+    }
+    &.azul{
+        color: $azul
+    }
+    &.amarelo{
+        color: $amarelo
+    }
+    &.preto{
+        color: $preto
+    }
+    &.branco{
+        color: $branco
+    }
+}

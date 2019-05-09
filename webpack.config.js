@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -11,7 +12,7 @@ module.exports = {
 
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist/assets/js'),
         publicPath: '/',
     },
 
@@ -27,7 +28,7 @@ module.exports = {
                 loader: 'file-loader',
                 options: {
                     name: '[name].[ext]',
-                    outputPath: '../dist/assets/icons',
+                    outputPath: '../icons',
                     publicPath: 'icons',
                 },
             },
@@ -36,7 +37,7 @@ module.exports = {
                 loader: 'file-loader',
                 options: {
                     name: '[name].[ext]',
-                    outputPath: '../dist/assets/images',
+                    outputPath: '../images',
                     publicPath: 'images',
                 },
             },
@@ -45,7 +46,7 @@ module.exports = {
                 loader: 'file-loader',
                 options: {
                     name: '[name].[ext]',
-                    outputPath: '../dist/assets/fonts',
+                    outputPath: '../fonts',
                     publicPath: 'fonts',
                 },
             },
@@ -63,26 +64,35 @@ module.exports = {
     },
 
     plugins: [
+        new webpack.ProvidePlugin({
+            // inject ES5 modules as global vars
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery',
+            Tether: 'tether'
+        }),
         new MiniCssExtractPlugin({
-            filename: "../dist/assets/css/styles.css",
+            filename: "../css/styles.css",
         }),
     ],
 
     devServer: {
         contentBase: path.resolve(__dirname, 'dist'),
         port: 3002,
-        proxy: {
-            '/**': {
-                target: '/index.html',
-                bypass(req){
-                    if(req.headers.accept.indexOf('html') !== -1){
-                        return '/index.html';
-                    }
+        inline: true,
+        hot: true,
+        // proxy: {
+        //     '/**': {
+        //         target: '/index.html',
+        //         bypass(req){
+        //             if(req.headers.accept.indexOf('html') !== -1){
+        //                 return '/index.html';
+        //             }
 
-                    return '';
-                }
-            }
-        },        
+        //             return '';
+        //         }
+        //     }
+        // },        
     },
 
     devtool: 'none',
