@@ -1,3 +1,4 @@
 node_modules
 package-lock.json
-/dist/assets 
+/dist/assets/js
+/dist/assets/css
