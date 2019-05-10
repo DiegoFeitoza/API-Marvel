@@ -51,6 +51,15 @@ module.exports = {
                 },
             },
             {
+                test: /\.html$/,
+                loader: 'file-loader',
+                options: {
+                    name: '[name].[ext]',
+                    outputPath: '../../',
+                    publicPath: 'dist',
+                },
+            },
+            {
                 test: /\.(css|sass|scss)$/,
                 use: [
                     {
