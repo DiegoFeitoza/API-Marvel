@@ -65,7 +65,7 @@ module.exports = {
 
     plugins: [
         new webpack.ProvidePlugin({
-            // inject ES5 modules as global vars
+            // Injetando o Jquery ao site
             $: 'jquery',
             jQuery: 'jquery',
             'window.jQuery': 'jquery',
@@ -80,19 +80,7 @@ module.exports = {
         contentBase: path.resolve(__dirname, 'dist'),
         port: 3002,
         inline: true,
-        hot: true,
-        // proxy: {
-        //     '/**': {
-        //         target: '/index.html',
-        //         bypass(req){
-        //             if(req.headers.accept.indexOf('html') !== -1){
-        //                 return '/index.html';
-        //             }
-
-        //             return '';
-        //         }
-        //     }
-        // },        
+        hot: true,     
     },
 
     devtool: 'none',
