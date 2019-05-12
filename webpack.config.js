@@ -7,7 +7,7 @@ module.exports = {
 
     entry: {
         bundle: path.resolve(__dirname, 'src','app.js'),
-        functions: path.resolve(__dirname, 'src','functions.js'),
+        // functions: path.resolve(__dirname, 'src','functions.js'),
     },
 
     output: {
