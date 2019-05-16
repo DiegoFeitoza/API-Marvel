@@ -14,7 +14,7 @@ import './scss/app.scss';
 import './index.html';
 
 //Importando JS
-import './functions';
+import {carregaApi,chamaApi} from './functions';
 
 //Resposta de carregamento do JS
-console.log('Carregou o app.js');
+chamaApi(carregaApi('50','21dcabcc59fe581c8924813fbe35f477'));
