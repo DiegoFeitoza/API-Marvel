@@ -36,14 +36,15 @@
                 <div id="body-personagens">
                     <div class="card-personagem">   
                         <div class="media">
-                            <div class="media-top">
-                                <img src="{IMAGEM}" class="media-object imagem-personagens" alt="{NAME}">
+                            <div class="media-top header-card">
+                                <a href="{LINKPERSONAGEM}" target="_blank">
+                                    <img src="{IMAGEM}" class="media-object imagem-personagens" alt="{NAME}">
+                                </a>
                             </div>
                             <div class="media-body">
                                 <h4 class="media-heading nome-personagem">{NAME}</h4>
-                                <p class="descricao-personagem">{DESCRICAO}</p>
-                                <div class="footer-personagens">
-                                    <a href="javascript:;" class="pull-right"> + saiba mais</a>
+                                <div class="footer-personagens text-right">
+                                    {LINKS}
                                 </div>
                             </div>
                         </div>

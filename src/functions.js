@@ -14,64 +14,60 @@ const carregaApi = (limit,apikey) => {
 }
 
 const chamaApi = (ep) => {
-    fetch(ep).then(response => {
-        // console.log('Resposta 1: \n', response.json())
-        console.log('Foi 1')
-        return response.json()
+    fetch(ep).then(res => {
+        console.log('%cFoi 1\n==========================================\n','color: blue;')
+        return res.json()
     }).then(res => {
-        console.log(`Resposta 2: \n`,res)
+        console.log('%cResposta 2: \n','color: green;',res)
         return res.data
     }).then(res => {
-        console.log('Resposta 3: \n', res)
-        
-        // createCardPersonagens(item,cont+1)
-        // (res.data.data.count == cont+1) ? ajustaH() : ''
+        console.log('%cResposta 3: \n','color: green;', res)
         return res.results
     }).then(res => {
-        console.log(res)
-        
+        console.log('%cResposta 4: \n','color: green;',res)
+        res.map(response => {
+            console.log('%cResposta item: ','color: green;',response)
+            createCardPersonagens(response)
+        })
+    }).then(() => {
+        console.log('%c\n=============================================\n\nFinal da execução','color: blue;')
+        ajustaH()
     }).catch(error => {
-        console.log(`Erro: \n${error}`)
+        console.log('%cErro: %c"%s"\n=============================================\n\n','color: red', 'color: blue',error)
     })
-
-    fetch({
-
-    }).then({})
 }
 
 const createCardPersonagens = (res, cont) => {
-    // console.log(`Data create [${cont}] ========================================|\n`, res)
-
+    let linksPersonagem ='',
+        corpoLinks = '<a href="{LINKPERSONAGEM}" target="_blank"> {NOMELINK}</a>';
+    if(res.urls.length){
+        res.urls.map(resp => {
+            linksPersonagem += corpoLinks.replace('{LINKPERSONAGEM}',resp.url).replace('{NOMELINK}',resp.type)
+        })
+    }
     container.append(rowCard
                         .replace('{IMAGEM}',res.thumbnail.path+'.'+res.thumbnail.extension)
+                        .replace('{LINKPERSONAGEM}', (res.resourceURI) ? res.resourceURI : 'javascript:;')
                         .replace(/{NAME}/g,res.name)
-                        .replace('{DESCRICAO}',(res.description && res.description != "") ? res.description : 'Sem descrição'));
+                        .replace('{LINKS}',(linksPersonagem != '') ? linksPersonagem : '')
+                        );
 }
 
 const ajustaH = () => {    
     let maiorC = 0, maiorI = 0, maiorD = 0, maiorN = 0;
     container.find('.card-personagem').map((count,item) => {
         (item.clientHeight > maiorC) ? maiorC=item.clientHeight : ''
-        // console.log('Maior Card: ', item.clientHeight+'px')
     })
     container.find('.card-personagem .imagem-personagens').map((count,item) => {
         (item.clientHeight > maiorI) ? maiorI=item.clientHeight : ''
-        // console.log('Maior Imagem: ', item.clientHeight+'px')
-    })
-    container.find('.card-personagem .descricao-personagem').map((count,item) => {
-        (item.clientHeight > maiorD) ? maiorD=item.clientHeight : ''
-        // console.log('--Descrição: ', item.clientHeight+'px')
     })
     container.find('.card-personagem .nome-personagem').map((count,item) => {
         (item.clientHeight > maiorN) ? maiorN=item.clientHeight : ''
-        // console.log('--Nome: ', item.clientHeight+'px')
     })
 
     container.find('.card-personagem').css({'height':(maiorC+30)+'px'})
-    container.find('.card-personagem .imagem-personagens').parent().css({'height':maiorI+'px'})
-    container.find('.card-personagem .descricao-personagem').css({'height':maiorD+'px'})
+    container.find('.card-personagem .imagem-personagens').parent().css({'height':maiorI+'px', 'lineHeight':maiorI+'px'})
     container.find('.card-personagem .nome-personagem').css({'height':maiorN+'px'})
-    // console.log('Maior height: ', maiorC+'px')
 }
 
 export {carregaApi,chamaApi}
