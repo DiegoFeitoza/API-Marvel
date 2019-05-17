@@ -1,5 +1,6 @@
+import { resolve } from 'path';
+
 const md5 = require('md5')
-const axios = require('axios')
 
 var container = $('#lista-personagens'),
     rowCard = $('#corpo-card').clone().html();
@@ -13,15 +14,29 @@ const carregaApi = (limit,apikey) => {
 }
 
 const chamaApi = (ep) => {
-    axios.get(ep)
-        .then(res => {
-                res.data.data.results.map((item, cont) => {
-                    createCardPersonagens(item,cont+1)
-                    (res.data.data.count == cont+1) ? ajustaH() : ''
-                })
-            }).catch((error) => {
-            console.log(`Error Axios: `,error)
-        })
+    fetch(ep).then(response => {
+        // console.log('Resposta 1: \n', response.json())
+        console.log('Foi 1')
+        return response.json()
+    }).then(res => {
+        console.log(`Resposta 2: \n`,res)
+        return res.data
+    }).then(res => {
+        console.log('Resposta 3: \n', res)
+        
+        // createCardPersonagens(item,cont+1)
+        // (res.data.data.count == cont+1) ? ajustaH() : ''
+        return res.results
+    }).then(res => {
+        console.log(res)
+        
+    }).catch(error => {
+        console.log(`Erro: \n${error}`)
+    })
+
+    fetch({
+
+    }).then({})
 }
 
 const createCardPersonagens = (res, cont) => {

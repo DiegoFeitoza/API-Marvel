@@ -17,4 +17,4 @@ import './index.html';
 import {carregaApi,chamaApi} from './functions';
 
 //Resposta de carregamento do JS
-chamaApi(carregaApi('50','21dcabcc59fe581c8924813fbe35f477'));
+chamaApi(carregaApi('10','21dcabcc59fe581c8924813fbe35f477'));
